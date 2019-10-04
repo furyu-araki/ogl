@@ -15,6 +15,9 @@ GLFWwindow* window;
 // namespaceを書いておくと "glm::vec3" と書く代わりに "vec3" と書ける
 using namespace glm;
 
+// シェーダを読み込むメソッドをインクルード
+#include <common/shader.hpp>
+
 int main( void )
 {
 	// GLFWを初期化する
@@ -57,7 +60,7 @@ int main( void )
 	// キーボードタップをハンドリングするために必要っぽい
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
-	// 青く塗る
+	// クリア（画面を全部ある色で塗る操作）するときの色は青
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
     
     // VAO(Vertex Array Object)を作って、現在のものとしてセット
@@ -66,6 +69,9 @@ int main( void )
     GLuint VertexArrayID;
     glGenVertexArrays(1, &VertexArrayID); // 作成？
     glBindVertexArray(VertexArrayID); // セット？
+    
+    // GLSLのプログラムを作成してコンパイルする
+    GLuint programID = LoadShaders("SimpleVertexShader.vert", "SimpleFragmentShader.frag");
     
     // 3つの頂点を表す3つのベクトル。つないだら三角形になる。
     // Xは右方向が正、Yは上方向が正、Zは手前方向（自分の後ろの方向）が正
@@ -80,7 +86,7 @@ int main( void )
     GLuint vertexbuffer;
     // バッファを作る。
     // vertexbufferのアドレスを引数として入れている。
-    // これによってvertexbufferが生成されたバッファを表す？
+    // これによってvertexbufferが生成されたバッファを表す？vertexbufferにバッファのIDが入る
     glGenBuffers(1, &vertexbuffer);
     // これ以降のコマンドはvertexbufferに関するものだよという宣言
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
@@ -88,7 +94,11 @@ int main( void )
     glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
 
 	do{
+        // クリア（画面を全部ある色で塗る操作）
 		glClear(GL_COLOR_BUFFER_BIT);
+        
+        // コンパイルしたシェーダプログラムを利用する
+        glUseProgram(programID);
 
 		// index 0 の頂点属性配列（vertex attribute array）を有効化する？意味分かんない。
         glEnableVertexAttribArray(0);
@@ -114,6 +124,11 @@ int main( void )
 	} // ESCキーが押されたらループを抜ける
 	while( glfwGetKey(window, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
 		   glfwWindowShouldClose(window) == 0 );
+
+    // 後処理。VertexBuffer、VertexArray、プログラムを削除
+    glDeleteBuffers(1, &vertexbuffer);
+    glDeleteVertexArrays(1, &VertexArrayID);
+    glDeleteProgram(programID);
 
 	// OpenGLのウィンドウを閉じ、GLFWも終了する
 	glfwTerminate();
