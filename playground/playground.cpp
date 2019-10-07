@@ -88,7 +88,7 @@ int main( void )
                        vec3(0, 1, 0)  // 頭が上方向
                        );
     // モデル行列
-    mat4 Model = translate(mat4(), vec3(2.0f, 0.0f, 0.0f)) * rotate(90.f, vec3(1.0 , 0.0, 0.0)) * scale(vec3(2.0f, 2.0f, 2.0f)) ;
+    mat4 Model = mat4(1.0f);
     mat4 MVP = Projection * View * Model;
     
     // 3つの頂点を表す3つのベクトル。つないだら三角形になる。
