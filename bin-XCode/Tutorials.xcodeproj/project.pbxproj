@@ -421,6 +421,7 @@
 		B8D48329655C4CFB9A4B73F1 /* ConvertToLHProcess.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89A0F250896C4B44BD5BD2CB /* ConvertToLHProcess.cpp */; };
 		B9C49026C2DE47FB87CF56C9 /* btBox2dBox2dCollisionAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C54A0BF637C84D41B6B99466 /* btBox2dBox2dCollisionAlgorithm.cpp */; };
 		BA8EE433ACB64C91A30EA22C /* IFCMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FE3028441F5741E4B6231ACE /* IFCMaterial.cpp */; };
+		BB00E6D8234B31ED00EF64EB /* texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB00E6D6234B31BD00EF64EB /* texture.cpp */; };
 		BB21B79313864869955D25B4 /* TwColors.mm in Sources */ = {isa = PBXBuildFile; fileRef = F76B0857180E485CB3E083FE /* TwColors.mm */; };
 		BB26455D450343B0B1059024 /* tutorial18_particles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8D610FAF041B4E8AAFB2FB82 /* tutorial18_particles.cpp */; };
 		BBA65135E3DD49BAB9FC66D3 /* shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34FDA0FF08EE42278FCE1A82 /* shader.cpp */; };
@@ -2891,6 +2892,8 @@
 		BAC0377320044D56A16631D8 /* btConeTwistConstraint.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = btConeTwistConstraint.h; path = "external/bullet-2.81-rev2613/src/BulletDynamics/ConstraintSolver/btConeTwistConstraint.h"; sourceTree = SOURCE_ROOT; };
 		BAF4EE25323D497B99521E3C /* compress.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = compress.c; path = "external/assimp-3.0.1270/contrib/zlib/compress.c"; sourceTree = SOURCE_ROOT; };
 		BB00E6A8234B2BC800EF64EB /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		BB00E6D5234B31BD00EF64EB /* texture.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = texture.hpp; path = common/texture.hpp; sourceTree = "<group>"; };
+		BB00E6D6234B31BD00EF64EB /* texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = texture.cpp; path = common/texture.cpp; sourceTree = "<group>"; };
 		BB6312E45A3A4BC282FBDB9E /* btBvhTriangleMeshShape.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = btBvhTriangleMeshShape.h; path = "external/bullet-2.81-rev2613/src/BulletCollision/CollisionShapes/btBvhTriangleMeshShape.h"; sourceTree = SOURCE_ROOT; };
 		BB6FC2B16576475A89D1F287 /* btActionInterface.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = btActionInterface.h; path = "external/bullet-2.81-rev2613/src/BulletDynamics/Dynamics/btActionInterface.h"; sourceTree = SOURCE_ROOT; };
 		BB70E72A45524AE79E2ADD7D /* gim_bitset.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = gim_bitset.h; path = "external/bullet-2.81-rev2613/src/BulletCollision/Gimpact/gim_bitset.h"; sourceTree = SOURCE_ROOT; };
@@ -5589,6 +5592,8 @@
 		C36E4D91D9E9411E8F464351 /* common */ = {
 			isa = PBXGroup;
 			children = (
+				BB00E6D6234B31BD00EF64EB /* texture.cpp */,
+				BB00E6D5234B31BD00EF64EB /* texture.hpp */,
 				6369ADBC37A14B2A85E08965 /* shader.cpp */,
 				D636B6318EB7475A81135DE5 /* shader.hpp */,
 			);
@@ -7628,6 +7633,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB00E6D8234B31ED00EF64EB /* texture.cpp in Sources */,
 				BC6E26EEEC834CE7A5A68728 /* shader.cpp in Sources */,
 				46427A33711C49CF9E95A80D /* playground.cpp in Sources */,
 			);
