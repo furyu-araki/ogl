@@ -1,8 +1,12 @@
 #version 330 core
+
+// vertex shaderからの入力
+in vec3 fragmentColor;
+
 // out は出力を表す
 out vec3 color;
 
 void main() {
-    // 赤を指定
-    color = vec3(1, 0, 0);
+    // vertex shaderから渡された色をそのままセット
+    color = fragmentColor;
 }
