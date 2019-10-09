@@ -7,6 +7,7 @@ in vec2 UV;
 out vec3 color;
 
 // テクスチャ
+// uniformはすべてのメッシュで一定の値
 uniform sampler2D myTextureSampler;
 
 void main() {

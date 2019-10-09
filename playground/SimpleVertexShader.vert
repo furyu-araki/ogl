@@ -11,6 +11,7 @@ layout(location = 1) in vec2 vertexUV;
 // fragment shaderへの出力
 out vec2 UV;
 
+// uniformはすべてのメッシュで一定の値
 uniform mat4 MVP;
 
 void main() {
