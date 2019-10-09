@@ -217,8 +217,8 @@ int main( void )
         
         // Matrixをシェーダに送る
         // 2次元の行列だから、[0][0]で行列の最初の要素のアドレスを渡している？
-        mat4 MVP = Projection * View * rotate(degree, vec3(1.0 , 1.0, 0.0)) * Model;
-        degree += 0.01f;
+        mat4 MVP = Projection * View * rotate(degree, vec3(0.0 , 0.0, 0.5)) * Model;
+        degree += 0.05f;
         glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
 
 		// index 0（1つ目）の頂点属性配列（vertex attribute array）を有効化する
