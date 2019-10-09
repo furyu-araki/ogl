@@ -91,7 +91,7 @@ int main( void )
     mat4 Projection = perspective(radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
     // カメラ行列
     mat4 View = lookAt(
-                       vec3(4, 3, -3), // カメラの場所
+                       vec3(4, 3, 3), // カメラの場所
                        vec3(0, 0, 0), // 原点を見る
                        vec3(0, 1, 0)  // 頭が上方向
                        );
