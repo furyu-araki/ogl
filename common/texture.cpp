@@ -12,9 +12,9 @@ GLuint loadBMP_custom(const char * imagepath){
 	printf("Reading image %s\n", imagepath);
 
 	// Data read from the header of the BMP file
-	unsigned char header[54];
-	unsigned int dataPos;
-	unsigned int imageSize;
+	unsigned char header[54]; // BMPファイルのヘッダは54バイト
+	unsigned int dataPos; // 実際のデータの場所
+	unsigned int imageSize; // width * height * 3
 	unsigned int width, height;
 	// Actual RGB data
 	unsigned char * data;
@@ -27,54 +27,54 @@ GLuint loadBMP_custom(const char * imagepath){
 		return 0;
 	}
 
-	// Read the header, i.e. the 54 first bytes
+	// ヘッダを読み込んで、BMPであることを確認する
 
-	// If less than 54 bytes are read, problem
+	// 54バイトでないなら、BMPじゃない。
 	if ( fread(header, 1, 54, file)!=54 ){ 
 		printf("Not a correct BMP file\n");
 		fclose(file);
 		return 0;
 	}
-	// A BMP files always begins with "BM"
+	// BMPファイルのヘッダは必ずBMで始まる
 	if ( header[0]!='B' || header[1]!='M' ){
 		printf("Not a correct BMP file\n");
 		fclose(file);
 		return 0;
 	}
-	// Make sure this is a 24bpp file
+	// bpp(bit per pixel)の検査。Make sure this is a 24bpp file
 	if ( *(int*)&(header[0x1E])!=0  )         {printf("Not a correct BMP file\n");    fclose(file); return 0;}
 	if ( *(int*)&(header[0x1C])!=24 )         {printf("Not a correct BMP file\n");    fclose(file); return 0;}
 
-	// Read the information about the image
+	// 画像に関する情報をヘッダから読み込む
 	dataPos    = *(int*)&(header[0x0A]);
 	imageSize  = *(int*)&(header[0x22]);
 	width      = *(int*)&(header[0x12]);
 	height     = *(int*)&(header[0x16]);
 
-	// Some BMP files are misformatted, guess missing information
-	if (imageSize==0)    imageSize=width*height*3; // 3 : one byte for each Red, Green and Blue component
-	if (dataPos==0)      dataPos=54; // The BMP header is done that way
+	// もしBMPファイルのフォーマットがまちがっている場合は、補正します。
+	if (imageSize==0)    imageSize=width*height*3; // 3 : 1バイトは赤緑青の3色
+	if (dataPos==0)      dataPos=54; // ヘッダはこれで終わり
 
-	// Create a buffer
+	// バッファを作る
 	data = new unsigned char [imageSize];
 
-	// Read the actual data from the file into the buffer
+	// ファイルから実際のデータをバッファに読み込む
 	fread(data,1,imageSize,file);
 
-	// Everything is in memory now, the file can be closed.
+	// 必要なものはすべてメモリ上にあるので、ファイルを閉じる
 	fclose (file);
 
-	// Create one OpenGL texture
+	// OpenGLのテクスチャを1つ作る
 	GLuint textureID;
 	glGenTextures(1, &textureID);
 	
-	// "Bind" the newly created texture : all future texture functions will modify this texture
+	// これ以降のテクスチャ関数は、textureID（今作ったテクスチャ）に関するもの
 	glBindTexture(GL_TEXTURE_2D, textureID);
 
-	// Give the image to OpenGL
+	// 画像のデータをOpenGLに（テクスチャに？）わたす
 	glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
 
-	// OpenGL has now copied the data. Free our own version
+	// OpenGLにデータが渡ったので、メモリ上のデータは開放する
 	delete [] data;
 
 	// Poor filtering, or ...

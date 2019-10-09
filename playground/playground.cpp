@@ -21,6 +21,9 @@ using namespace glm;
 // シェーダを読み込むメソッドをインクルード
 #include <common/shader.hpp>
 
+// テクスチャを読み込むメソッドをインクルード
+#include <common/texture.hpp>
+
 int main( void )
 {
 	// GLFWを初期化する
@@ -96,6 +99,13 @@ int main( void )
     mat4 Model = mat4(1.0f);
     mat4 MVP = Projection * View * Model;
     
+    // テクスチャを読み込む
+    GLuint Texture = loadDDS("uvtemplate.DDS");
+    
+    // テクスチャをシェーダにわたす準備
+    GLuint TextureID = glGetUniformLocation(programID, "myTextureSampler");
+    
+    
     // 三角形を12枚描いている。3頂点が12個
     // Xは右方向が正、Yは上方向が正、Zは手前方向（自分の後ろの方向）が正
     static const GLfloat g_vertex_buffer_data[] = {
@@ -137,44 +147,44 @@ int main( void )
          1.0f,-1.0f, 1.0f
     };
     
-    // 色のデータ
-    static const GLfloat g_color_buffer_data[] = {
-        0.583f,  0.771f,  0.014f,
-        0.609f,  0.115f,  0.436f,
-        0.327f,  0.483f,  0.844f,
-        0.822f,  0.569f,  0.201f,
-        0.435f,  0.602f,  0.223f,
-        0.310f,  0.747f,  0.185f,
-        0.597f,  0.770f,  0.761f,
-        0.559f,  0.436f,  0.730f,
-        0.359f,  0.583f,  0.152f,
-        0.483f,  0.596f,  0.789f,
-        0.559f,  0.861f,  0.639f,
-        0.195f,  0.548f,  0.859f,
-        0.014f,  0.184f,  0.576f,
-        0.771f,  0.328f,  0.970f,
-        0.406f,  0.615f,  0.116f,
-        0.676f,  0.977f,  0.133f,
-        0.971f,  0.572f,  0.833f,
-        0.140f,  0.616f,  0.489f,
-        0.997f,  0.513f,  0.064f,
-        0.945f,  0.719f,  0.592f,
-        0.543f,  0.021f,  0.978f,
-        0.279f,  0.317f,  0.505f,
-        0.167f,  0.620f,  0.077f,
-        0.347f,  0.857f,  0.137f,
-        0.055f,  0.953f,  0.042f,
-        0.714f,  0.505f,  0.345f,
-        0.783f,  0.290f,  0.734f,
-        0.722f,  0.645f,  0.174f,
-        0.302f,  0.455f,  0.848f,
-        0.225f,  0.587f,  0.040f,
-        0.517f,  0.713f,  0.338f,
-        0.053f,  0.959f,  0.120f,
-        0.393f,  0.621f,  0.362f,
-        0.673f,  0.211f,  0.457f,
-        0.820f,  0.883f,  0.371f,
-        0.982f,  0.099f,  0.879f
+    // UV座標のデータ
+    static const GLfloat g_uv_buffer_data[] = {
+        0.000059f, 1.0f-0.000004f,
+        0.000103f, 1.0f-0.336048f,
+        0.335973f, 1.0f-0.335903f,
+        1.000023f, 1.0f-0.000013f,
+        0.667979f, 1.0f-0.335851f,
+        0.999958f, 1.0f-0.336064f,
+        0.667979f, 1.0f-0.335851f,
+        0.336024f, 1.0f-0.671877f,
+        0.667969f, 1.0f-0.671889f,
+        1.000023f, 1.0f-0.000013f,
+        0.668104f, 1.0f-0.000013f,
+        0.667979f, 1.0f-0.335851f,
+        0.000059f, 1.0f-0.000004f,
+        0.335973f, 1.0f-0.335903f,
+        0.336098f, 1.0f-0.000071f,
+        0.667979f, 1.0f-0.335851f,
+        0.335973f, 1.0f-0.335903f,
+        0.336024f, 1.0f-0.671877f,
+        1.000004f, 1.0f-0.671847f,
+        0.999958f, 1.0f-0.336064f,
+        0.667979f, 1.0f-0.335851f,
+        0.668104f, 1.0f-0.000013f,
+        0.335973f, 1.0f-0.335903f,
+        0.667979f, 1.0f-0.335851f,
+        0.335973f, 1.0f-0.335903f,
+        0.668104f, 1.0f-0.000013f,
+        0.336098f, 1.0f-0.000071f,
+        0.000103f, 1.0f-0.336048f,
+        0.000004f, 1.0f-0.671870f,
+        0.336024f, 1.0f-0.671877f,
+        0.000103f, 1.0f-0.336048f,
+        0.336024f, 1.0f-0.671877f,
+        0.335973f, 1.0f-0.335903f,
+        0.667969f, 1.0f-0.671889f,
+        1.000004f, 1.0f-0.671847f,
+        0.667979f, 1.0f-0.335851f
     };
     
     // バッファを表す。
@@ -189,14 +199,14 @@ int main( void )
     // 頂点のデータをOpenGLに渡す
     glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
     
-    // 色用のバッファ
-    GLuint colorbuffer;
+    // UV座標用のバッファ
+    GLuint uvbuffer;
     // バッファを作る
-    glGenBuffers(1, &colorbuffer);
-    // これ以降のコマンドはcolorbufferに関するもの
-    glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-    // 色用バッファのデータをOpenGLに渡す
-    glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
+    glGenBuffers(1, &uvbuffer);
+    // これ以降のコマンドはuvbufferに関するもの
+    glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+    // UV座標用バッファのデータをOpenGLに渡す
+    glBufferData(GL_ARRAY_BUFFER, sizeof(g_uv_buffer_data), g_uv_buffer_data, GL_STATIC_DRAW);
 
 	do{
         // クリア（画面を全部ある色で塗る操作、デプスもクリアする）
@@ -221,12 +231,12 @@ int main( void )
                               (void*) 0 // オフセットは0なので無し。普通に最初からデータを読む
                               );
         
-        // index 1（2つ目）の属性バッファは色のやつ
+        // index 1（2つ目）の属性バッファはUV座標のやつ
         glEnableVertexAttribArray(1);
-        glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
+        glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
         glVertexAttribPointer(
-            1,                                // シェーダー側のlayoutとと合わせる。色用は1とした。
-            3,                                // size
+            1,                                // シェーダー側のlayoutとと合わせる。UV用は1とした。
+            2,                                // size。UVはUとVのvec2なので2
             GL_FLOAT,                         // type
             GL_FALSE,                         // normalized?
             0,                                // stride
@@ -248,11 +258,12 @@ int main( void )
 	while( glfwGetKey(window, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
 		   glfwWindowShouldClose(window) == 0 );
 
-    // 後処理。VertexBuffer、VertexArray、プログラムを削除
+    // 後処理。VertexBuffer、VertexArray、プログラム、テクスチャを削除
     glDeleteBuffers(1, &vertexbuffer);
-    glDeleteBuffers(1, &colorbuffer);
+    glDeleteBuffers(1, &uvbuffer);
     glDeleteVertexArrays(1, &VertexArrayID);
     glDeleteProgram(programID);
+    glDeleteTextures(1, &Texture);
 
 	// OpenGLのウィンドウを閉じ、GLFWも終了する
 	glfwTerminate();

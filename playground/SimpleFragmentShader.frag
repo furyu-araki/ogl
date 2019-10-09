@@ -1,12 +1,15 @@
 #version 330 core
 
 // vertex shaderからの入力
-in vec3 fragmentColor;
+in vec2 UV;
 
 // out は出力を表す
 out vec3 color;
 
+// テクスチャ
+uniform sampler2D myTextureSampler;
+
 void main() {
-    // vertex shaderから渡された色をそのままセット
-    color = fragmentColor;
+    // 指定したUV座標のテクスチャの色
+    color = texture(myTextureSampler, UV).rgb;
 }

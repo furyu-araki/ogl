@@ -6,10 +6,10 @@
 // 各頂点ごとに処理が走り、そのたびにvertexPosition_modelspaceに頂点座標が入る？
 // in は入力を表す
 layout(location = 0) in vec3 vertexPosition_modelspace;
-layout(location = 1) in vec3 vertexColor;
+layout(location = 1) in vec2 vertexUV;
 
 // fragment shaderへの出力
-out vec3 fragmentColor;
+out vec2 UV;
 
 uniform mat4 MVP;
 
@@ -22,5 +22,6 @@ void main() {
     vec4 v = vec4(vertexPosition_modelspace, 1); // wを足す。位置ベクトルなので1
     gl_Position = MVP * v;
     
-    fragmentColor = vertexColor;
+    // そのままフラグメントシェーダにわたすだけ
+    UV = vertexUV;
 }
