@@ -97,7 +97,6 @@ int main( void )
                        );
     // モデル行列
     mat4 Model = mat4(1.0f);
-    mat4 MVP = Projection * View * Model;
     
     // テクスチャを読み込む
     GLuint Texture = loadDDS("uvtemplate.DDS");
@@ -208,6 +207,7 @@ int main( void )
     // UV座標用バッファのデータをOpenGLに渡す
     glBufferData(GL_ARRAY_BUFFER, sizeof(g_uv_buffer_data), g_uv_buffer_data, GL_STATIC_DRAW);
 
+    float degree = 0.f;
 	do{
         // クリア（画面を全部ある色で塗る操作、デプスもクリアする）
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -217,6 +217,8 @@ int main( void )
         
         // Matrixをシェーダに送る
         // 2次元の行列だから、[0][0]で行列の最初の要素のアドレスを渡している？
+        mat4 MVP = Projection * View * rotate(degree, vec3(1.0 , 1.0, 0.0)) * Model;
+        degree += 0.01f;
         glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
 
 		// index 0（1つ目）の頂点属性配列（vertex attribute array）を有効化する
