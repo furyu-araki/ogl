@@ -12,6 +12,5 @@ uniform sampler2D myTextureSampler;
 
 void main() {
     // 指定したUV座標のテクスチャの色
-    vec2 flipped = vec2(UV.x, 1.0 - UV.y);
-    color = texture(myTextureSampler, flipped).rgb;
+    color = texture(myTextureSampler, UV).rgb;
 }

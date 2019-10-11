@@ -1,6 +1,7 @@
 // 標準ヘッダをインクルード
 #include <stdio.h>
 #include <stdlib.h>
+#include <vector>
 
 // GLEWをインクルード。gl.hとglfw.hより先にインクルードする魔法の言葉らしい。
 // ググったらOpenGL Extension Wrangler Libraryとあったので、とりあえずライブラリなんだろう。
@@ -26,6 +27,9 @@ using namespace glm;
 
 // キーボード、マウス操作系のメソッドをインクルード
 #include <common/controls.hpp>
+
+// objファイルを読み込むメソッドをインクルード
+#include <common/objloader.hpp>
 
 int main( void )
 {
@@ -100,91 +104,21 @@ int main( void )
     GLuint MatrixID = glGetUniformLocation(programID, "MVP");
     
     // テクスチャを読み込む
-    GLuint Texture = loadDDS("uvtemplate.DDS");
+    GLuint Texture = loadDDS("uvmap.DDS");
     
     // テクスチャをシェーダにわたす準備
     GLuint TextureID = glGetUniformLocation(programID, "myTextureSampler");
     
-    // 三角形を12枚描いている。3頂点が12個
-    // Xは右方向が正、Yは上方向が正、Zは手前方向（自分の後ろの方向）が正
-    static const GLfloat g_vertex_buffer_data[] = {
-        -1.0f,-1.0f,-1.0f, // 三角形1:開始
-        -1.0f,-1.0f, 1.0f,
-        -1.0f, 1.0f, 1.0f, // 三角形1:終了
-         1.0f, 1.0f,-1.0f, // 三角形2:開始
-        -1.0f,-1.0f,-1.0f,
-        -1.0f, 1.0f,-1.0f, // 三角形2:終了
-         1.0f,-1.0f, 1.0f,
-        -1.0f,-1.0f,-1.0f,
-         1.0f,-1.0f,-1.0f,
-         1.0f, 1.0f,-1.0f,
-         1.0f,-1.0f,-1.0f,
-        -1.0f,-1.0f,-1.0f,
-        -1.0f,-1.0f,-1.0f,
-        -1.0f, 1.0f, 1.0f,
-        -1.0f, 1.0f,-1.0f,
-         1.0f,-1.0f, 1.0f,
-        -1.0f,-1.0f, 1.0f,
-        -1.0f,-1.0f,-1.0f,
-        -1.0f, 1.0f, 1.0f,
-        -1.0f,-1.0f, 1.0f,
-         1.0f,-1.0f, 1.0f,
-         1.0f, 1.0f, 1.0f,
-         1.0f,-1.0f,-1.0f,
-         1.0f, 1.0f,-1.0f,
-         1.0f,-1.0f,-1.0f,
-         1.0f, 1.0f, 1.0f,
-         1.0f,-1.0f, 1.0f,
-         1.0f, 1.0f, 1.0f,
-         1.0f, 1.0f,-1.0f,
-        -1.0f, 1.0f,-1.0f,
-         1.0f, 1.0f, 1.0f,
-        -1.0f, 1.0f,-1.0f,
-        -1.0f, 1.0f, 1.0f,
-         1.0f, 1.0f, 1.0f,
-        -1.0f, 1.0f, 1.0f,
-         1.0f,-1.0f, 1.0f
-    };
-    
-    // UV座標のデータ。ブレンダーで作ったやつ
-    static const GLfloat g_uv_buffer_data[] = {
-        0.000059f, 1.0f-0.000004f,
-        0.000103f, 1.0f-0.336048f,
-        0.335973f, 1.0f-0.335903f,
-        1.000023f, 1.0f-0.000013f,
-        0.667979f, 1.0f-0.335851f,
-        0.999958f, 1.0f-0.336064f,
-        0.667979f, 1.0f-0.335851f,
-        0.336024f, 1.0f-0.671877f,
-        0.667969f, 1.0f-0.671889f,
-        1.000023f, 1.0f-0.000013f,
-        0.668104f, 1.0f-0.000013f,
-        0.667979f, 1.0f-0.335851f,
-        0.000059f, 1.0f-0.000004f,
-        0.335973f, 1.0f-0.335903f,
-        0.336098f, 1.0f-0.000071f,
-        0.667979f, 1.0f-0.335851f,
-        0.335973f, 1.0f-0.335903f,
-        0.336024f, 1.0f-0.671877f,
-        1.000004f, 1.0f-0.671847f,
-        0.999958f, 1.0f-0.336064f,
-        0.667979f, 1.0f-0.335851f,
-        0.668104f, 1.0f-0.000013f,
-        0.335973f, 1.0f-0.335903f,
-        0.667979f, 1.0f-0.335851f,
-        0.335973f, 1.0f-0.335903f,
-        0.668104f, 1.0f-0.000013f,
-        0.336098f, 1.0f-0.000071f,
-        0.000103f, 1.0f-0.336048f,
-        0.000004f, 1.0f-0.671870f,
-        0.336024f, 1.0f-0.671877f,
-        0.000103f, 1.0f-0.336048f,
-        0.336024f, 1.0f-0.671877f,
-        0.335973f, 1.0f-0.335903f,
-        0.667969f, 1.0f-0.671889f,
-        1.000004f, 1.0f-0.671847f,
-        0.667979f, 1.0f-0.335851f
-    };
+    std::vector<vec3> vertices;
+    std::vector<vec2> uvs;
+    std::vector<vec3> normals;
+    bool res = loadOBJ("cube.obj", vertices, uvs, normals);
+    if( !res )
+    {
+        fprintf( stderr, "Failed to load obj file\n" );
+        getchar();
+        return -1;
+    }
     
     // バッファを表す。
     // バッファは、データを一時的に保持する場所という認識でOKかな？
@@ -196,7 +130,7 @@ int main( void )
     // これ以降のコマンドはvertexbufferに関するものだよという宣言
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
     // 頂点のデータをOpenGLに渡す
-    glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(vec3), &vertices[0], GL_STATIC_DRAW);
     
     // UV座標用のバッファ
     GLuint uvbuffer;
@@ -205,7 +139,7 @@ int main( void )
     // これ以降のコマンドはuvbufferに関するもの
     glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
     // UV座標用バッファのデータをOpenGLに渡す
-    glBufferData(GL_ARRAY_BUFFER, sizeof(g_uv_buffer_data), g_uv_buffer_data, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(vec2), &uvs[0], GL_STATIC_DRAW);
 
 	do{
         // クリア（画面を全部ある色で塗る操作、デプスもクリアする）
