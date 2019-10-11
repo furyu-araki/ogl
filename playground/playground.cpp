@@ -87,17 +87,6 @@ int main( void )
     // Matrixをシェーダに渡すための準備
     GLuint MatrixID = glGetUniformLocation(programID, "MVP");
     
-    // 射影行列。45度の画角、アスペクト比4:3、表示範囲0.1~100
-    mat4 Projection = perspective(radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
-    // カメラ行列
-    mat4 View = lookAt(
-                       vec3(4, 3, 3), // カメラの場所
-                       vec3(0, 0, 0), // 原点を見る
-                       vec3(0, 1, 0)  // 頭が上方向
-                       );
-    // モデル行列
-    mat4 Model = mat4(1.0f);
-    
     // テクスチャを読み込む
     GLuint Texture = loadDDS("uvtemplate.DDS");
     
@@ -207,7 +196,6 @@ int main( void )
     // UV座標用バッファのデータをOpenGLに渡す
     glBufferData(GL_ARRAY_BUFFER, sizeof(g_uv_buffer_data), g_uv_buffer_data, GL_STATIC_DRAW);
 
-    float degree = 0.f;
 	do{
         // クリア（画面を全部ある色で塗る操作、デプスもクリアする）
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -217,8 +205,17 @@ int main( void )
         
         // Matrixをシェーダに送る
         // 2次元の行列だから、[0][0]で行列の最初の要素のアドレスを渡している？
-        mat4 MVP = Projection * View * rotate(degree, vec3(0.0 , 0.0, 0.5)) * Model;
-        degree += 0.05f;
+        // 射影行列。45度の画角、アスペクト比4:3、表示範囲0.1~100
+        mat4 Projection = perspective(radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
+        // カメラ行列
+        mat4 View = lookAt(
+                           vec3(4, 3, 3), // カメラの場所
+                           vec3(0, 0, 0), // 原点を見る
+                           vec3(0, 1, 0)  // 頭が上方向
+                           );
+        // モデル行列
+        mat4 Model = mat4(1.0f);
+        mat4 MVP = Projection * View * Model;
         glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
 
 		// index 0（1つ目）の頂点属性配列（vertex attribute array）を有効化する
