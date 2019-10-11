@@ -24,6 +24,9 @@ using namespace glm;
 // テクスチャを読み込むメソッドをインクルード
 #include <common/texture.hpp>
 
+// キーボード、マウス操作系のメソッドをインクルード
+#include <common/controls.hpp>
+
 int main( void )
 {
 	// GLFWを初期化する
@@ -65,6 +68,12 @@ int main( void )
 
 	// キーボードタップをハンドリングするために必要っぽい
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+    // マウス操作をハンドリングできる。無限に動かせる設定。
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    
+    // マウスを画面の中心に持ってくる
+    glfwPollEvents();
+    glfwSetCursorPos(window, 1024/2, 768/2);
 
 	// クリア（画面を全部ある色で塗る操作）するときの色は青
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
@@ -73,6 +82,9 @@ int main( void )
     glEnable(GL_DEPTH_TEST);
     // 前のものよりもカメラに近ければ合格とする
     glDepthFunc(GL_LESS);
+    
+    // ポリゴンの中身が表示されないようにする
+    glEnable(GL_CULL_FACE);
     
     // VAO(Vertex Array Object)を作って、現在のものとしてセット
     // Vertexは日本語だと頂点という意味
@@ -92,7 +104,6 @@ int main( void )
     
     // テクスチャをシェーダにわたす準備
     GLuint TextureID = glGetUniformLocation(programID, "myTextureSampler");
-    
     
     // 三角形を12枚描いている。3頂点が12個
     // Xは右方向が正、Yは上方向が正、Zは手前方向（自分の後ろの方向）が正
@@ -204,19 +215,18 @@ int main( void )
         glUseProgram(programID);
         
         // Matrixをシェーダに送る
-        // 2次元の行列だから、[0][0]で行列の最初の要素のアドレスを渡している？
-        // 射影行列。45度の画角、アスペクト比4:3、表示範囲0.1~100
-        mat4 Projection = perspective(radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
-        // カメラ行列
-        mat4 View = lookAt(
-                           vec3(4, 3, 3), // カメラの場所
-                           vec3(0, 0, 0), // 原点を見る
-                           vec3(0, 1, 0)  // 頭が上方向
-                           );
-        // モデル行列
+        computeMatricesFromInputs();
+        mat4 Projection = getProjectionMatrix();
+        mat4 View = getViewMatrix();
         mat4 Model = mat4(1.0f);
         mat4 MVP = Projection * View * Model;
         glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+        
+        // Bind our texture in Texture Unit 0
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, Texture);
+        // Set our "myTextureSampler" sampler to use Texture Unit 0
+        glUniform1i(TextureID, 0);
 
 		// index 0（1つ目）の頂点属性配列（vertex attribute array）を有効化する
         glEnableVertexAttribArray(0);
