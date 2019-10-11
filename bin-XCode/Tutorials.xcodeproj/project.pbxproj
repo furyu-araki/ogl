@@ -425,6 +425,7 @@
 		BB21B79313864869955D25B4 /* TwColors.mm in Sources */ = {isa = PBXBuildFile; fileRef = F76B0857180E485CB3E083FE /* TwColors.mm */; };
 		BB26455D450343B0B1059024 /* tutorial18_particles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8D610FAF041B4E8AAFB2FB82 /* tutorial18_particles.cpp */; };
 		BB980BC42350548E006D74A9 /* controls.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB980BC22350548E006D74A9 /* controls.cpp */; };
+		BB980BD023508433006D74A9 /* objloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB980BCE23508433006D74A9 /* objloader.cpp */; };
 		BBA65135E3DD49BAB9FC66D3 /* shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34FDA0FF08EE42278FCE1A82 /* shader.cpp */; };
 		BBBEAE6ED32F41C1B5FA9CC1 /* shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DFD3A985BA664C95AFD2FB48 /* shader.cpp */; };
 		BC52D526479740F2B519E4C9 /* COBLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDD81F4E790740B0B3689839 /* COBLoader.cpp */; };
@@ -2901,6 +2902,8 @@
 		BB77C7CDFAE543DA943C08EF /* btGeometryUtil.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = btGeometryUtil.cpp; path = "external/bullet-2.81-rev2613/src/LinearMath/btGeometryUtil.cpp"; sourceTree = SOURCE_ROOT; };
 		BB980BC22350548E006D74A9 /* controls.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = controls.cpp; path = common/controls.cpp; sourceTree = "<group>"; };
 		BB980BC32350548E006D74A9 /* controls.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = controls.hpp; path = common/controls.hpp; sourceTree = "<group>"; };
+		BB980BCE23508433006D74A9 /* objloader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = objloader.cpp; path = common/objloader.cpp; sourceTree = "<group>"; };
+		BB980BCF23508433006D74A9 /* objloader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = objloader.hpp; path = common/objloader.hpp; sourceTree = "<group>"; };
 		BBB6FCC5234745F300EF6F09 /* SimpleFragmentShader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = SimpleFragmentShader.frag; path = playground/SimpleFragmentShader.frag; sourceTree = "<group>"; };
 		BBB6FCC6234745F300EF6F09 /* SimpleVertexShader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = SimpleVertexShader.vert; path = playground/SimpleVertexShader.vert; sourceTree = "<group>"; };
 		BBC79981B6A646FE96A254A8 /* TriangulateProcess.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = TriangulateProcess.h; path = "external/assimp-3.0.1270/code/TriangulateProcess.h"; sourceTree = SOURCE_ROOT; };
@@ -5595,6 +5598,8 @@
 		C36E4D91D9E9411E8F464351 /* common */ = {
 			isa = PBXGroup;
 			children = (
+				BB980BCE23508433006D74A9 /* objloader.cpp */,
+				BB980BCF23508433006D74A9 /* objloader.hpp */,
 				BB980BC22350548E006D74A9 /* controls.cpp */,
 				BB980BC32350548E006D74A9 /* controls.hpp */,
 				BB00E6D6234B31BD00EF64EB /* texture.cpp */,
@@ -7641,6 +7646,7 @@
 				BB00E6D8234B31ED00EF64EB /* texture.cpp in Sources */,
 				BB980BC42350548E006D74A9 /* controls.cpp in Sources */,
 				BC6E26EEEC834CE7A5A68728 /* shader.cpp in Sources */,
+				BB980BD023508433006D74A9 /* objloader.cpp in Sources */,
 				46427A33711C49CF9E95A80D /* playground.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
