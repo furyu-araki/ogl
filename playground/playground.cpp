@@ -104,7 +104,7 @@ int main( void )
     GLuint MatrixID = glGetUniformLocation(programID, "MVP");
     
     // テクスチャを読み込む
-    GLuint Texture = loadDDS("uvmap.DDS");
+    GLuint Texture = loadDDS("uvmap_suzanne.DDS");
     
     // テクスチャをシェーダにわたす準備
     GLuint TextureID = glGetUniformLocation(programID, "myTextureSampler");
@@ -112,7 +112,7 @@ int main( void )
     std::vector<vec3> vertices;
     std::vector<vec2> uvs;
     std::vector<vec3> normals;
-    bool res = loadOBJ("cube.obj", vertices, uvs, normals);
+    bool res = loadOBJ("suzanne.obj", vertices, uvs, normals);
     if( !res )
     {
         fprintf( stderr, "Failed to load obj file\n" );
@@ -140,7 +140,7 @@ int main( void )
     glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
     // UV座標用バッファのデータをOpenGLに渡す
     glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(vec2), &uvs[0], GL_STATIC_DRAW);
-
+    
 	do{
         // クリア（画面を全部ある色で塗る操作、デプスもクリアする）
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -187,8 +187,8 @@ int main( void )
         );
         
         // 三角形を書く！
-        // 頂点0から頂点36(12*3)まで描く
-        glDrawArrays(GL_TRIANGLES, 0, 12*3);
+        // 頂点0から頂点数まで描く
+        glDrawArrays(GL_TRIANGLES, 0, vertices.size());
         // 頂点属性配列（vertex attribute array）を無効化する。おまじないにしか見えない。
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
