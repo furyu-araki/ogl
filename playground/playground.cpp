@@ -102,6 +102,8 @@ int main( void )
     
     // Matrixをシェーダに渡すための準備
     GLuint MatrixID = glGetUniformLocation(programID, "MVP");
+    GLuint ViewMatrixID = glGetUniformLocation(programID, "V");
+    GLuint ModelMatrixID = glGetUniformLocation(programID, "M");
     
     // テクスチャを読み込む
     GLuint Texture = loadDDS("uvmap_suzanne.DDS");
@@ -141,6 +143,16 @@ int main( void )
     // UV座標用バッファのデータをOpenGLに渡す
     glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(vec2), &uvs[0], GL_STATIC_DRAW);
     
+    // 法線用のバッファ
+    GLuint normalbuffer;
+    glGenBuffers(1, &normalbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+    glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(vec3), &normals[0], GL_STATIC_DRAW);
+    
+    // ワールド座標での光源の位置
+    glUseProgram(programID);
+    GLuint LightID = glGetUniformLocation(programID, "LightPosition_worldspace");
+
 	do{
         // クリア（画面を全部ある色で塗る操作、デプスもクリアする）
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -155,6 +167,11 @@ int main( void )
         mat4 Model = mat4(1.0f);
         mat4 MVP = Projection * View * Model;
         glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+        glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &Model[0][0]);
+        glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &View[0][0]);
+        
+        vec3 lightPos = vec3(4, 4, 4);
+        glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z);
         
         // Bind our texture in Texture Unit 0
         glActiveTexture(GL_TEXTURE0);
@@ -185,6 +202,18 @@ int main( void )
             0,                                // stride
             (void*)0                          // array buffer offset
         );
+        
+        // index 2（3つ目）の属性バッファは法線
+        glEnableVertexAttribArray(2);
+        glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+        glVertexAttribPointer(
+                              2, // シェーダー側のlayoutと対応させる。法線用は2とした
+                              3, // サイズ。法線ベクトルはvec3なので3
+                              GL_FLOAT, // タイプ。法線ベクトルのデータ型
+                              GL_FALSE, // 正規化するか。最初からデータが正規化されているので正規化はしない。
+                              0, // ストライド。全部法線ベクトルを表す値なので、デフォルト設定で良い
+                              (void*) 0 // オフセット。普通に最初から読むので0
+                              );
         
         // 三角形を書く！
         // 頂点0から頂点数まで描く
