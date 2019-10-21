@@ -21,6 +21,7 @@ void main() {
     float LightPower = 50.0f; // 光の強さ
     
     vec3 MaterialDiffuseColor = texture(myTextureSampler, UV).rgb; // 拡散光＝物体の色。テクスチャからもらう
+    vec3 MaterialAmbientColor = vec3(0.1, 0.1, 0.1) * MaterialDiffuseColor; // 環境光
     
     // 光源と物体の距離
     float distance = length( LightPosition_worldspace - Position_worldspace );
@@ -47,6 +48,8 @@ void main() {
     float cosAlpha = clamp( dot( E,R ), 0,1 );
     
     color =
+        // 環境光: 間接光を偽装するために、物体を発光させる
+        MaterialAmbientColor +
         // 拡散光＝物体の色
         MaterialDiffuseColor * LightColor * LightPower * cosTheta / (distance*distance)
     ;
