@@ -22,6 +22,7 @@ void main() {
     
     vec3 MaterialDiffuseColor = texture(myTextureSampler, UV).rgb; // 拡散光＝物体の色。テクスチャからもらう
     vec3 MaterialAmbientColor = vec3(0.1, 0.1, 0.1) * MaterialDiffuseColor; // 環境光
+    vec3 MaterialSpecularColor = vec3(0.3,0.3,0.3); // 鏡面光
     
     // 光源と物体の距離
     float distance = length( LightPosition_worldspace - Position_worldspace );
@@ -52,5 +53,7 @@ void main() {
         MaterialAmbientColor +
         // 拡散光＝物体の色
         MaterialDiffuseColor * LightColor * LightPower * cosTheta / (distance*distance)
+        // 鏡面光: 鏡のようにハイライトする効果
+        + MaterialSpecularColor * LightColor * LightPower * pow(cosAlpha,5) / (distance*distance)
     ;
 }
