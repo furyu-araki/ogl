@@ -422,7 +422,7 @@
 		B9C49026C2DE47FB87CF56C9 /* btBox2dBox2dCollisionAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C54A0BF637C84D41B6B99466 /* btBox2dBox2dCollisionAlgorithm.cpp */; };
 		BA8EE433ACB64C91A30EA22C /* IFCMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FE3028441F5741E4B6231ACE /* IFCMaterial.cpp */; };
 		BB00E6D8234B31ED00EF64EB /* texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB00E6D6234B31BD00EF64EB /* texture.cpp */; };
-		BB0B5E5F23698418000C932F /* vboindexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB0B5E5E23698418000C932F /* vboindexer.cpp */; };
+		BB0B5E6223698912000C932F /* vboindexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB0B5E6123698912000C932F /* vboindexer.cpp */; };
 		BB21B79313864869955D25B4 /* TwColors.mm in Sources */ = {isa = PBXBuildFile; fileRef = F76B0857180E485CB3E083FE /* TwColors.mm */; };
 		BB26455D450343B0B1059024 /* tutorial18_particles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8D610FAF041B4E8AAFB2FB82 /* tutorial18_particles.cpp */; };
 		BB980BC42350548E006D74A9 /* controls.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB980BC22350548E006D74A9 /* controls.cpp */; };
@@ -2897,8 +2897,8 @@
 		BB00E6A8234B2BC800EF64EB /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		BB00E6D5234B31BD00EF64EB /* texture.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = texture.hpp; path = common/texture.hpp; sourceTree = "<group>"; };
 		BB00E6D6234B31BD00EF64EB /* texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = texture.cpp; path = common/texture.cpp; sourceTree = "<group>"; };
-		BB0B5E5D23698418000C932F /* vboindexer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = vboindexer.hpp; path = common/vboindexer.hpp; sourceTree = "<group>"; };
-		BB0B5E5E23698418000C932F /* vboindexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = vboindexer.cpp; path = common/vboindexer.cpp; sourceTree = "<group>"; };
+		BB0B5E6023698912000C932F /* vboindexer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = vboindexer.hpp; path = common/vboindexer.hpp; sourceTree = "<group>"; };
+		BB0B5E6123698912000C932F /* vboindexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = vboindexer.cpp; path = common/vboindexer.cpp; sourceTree = "<group>"; };
 		BB6312E45A3A4BC282FBDB9E /* btBvhTriangleMeshShape.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = btBvhTriangleMeshShape.h; path = "external/bullet-2.81-rev2613/src/BulletCollision/CollisionShapes/btBvhTriangleMeshShape.h"; sourceTree = SOURCE_ROOT; };
 		BB6FC2B16576475A89D1F287 /* btActionInterface.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = btActionInterface.h; path = "external/bullet-2.81-rev2613/src/BulletDynamics/Dynamics/btActionInterface.h"; sourceTree = SOURCE_ROOT; };
 		BB70E72A45524AE79E2ADD7D /* gim_bitset.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = gim_bitset.h; path = "external/bullet-2.81-rev2613/src/BulletCollision/Gimpact/gim_bitset.h"; sourceTree = SOURCE_ROOT; };
@@ -5601,8 +5601,8 @@
 		C36E4D91D9E9411E8F464351 /* common */ = {
 			isa = PBXGroup;
 			children = (
-				BB0B5E5E23698418000C932F /* vboindexer.cpp */,
-				BB0B5E5D23698418000C932F /* vboindexer.hpp */,
+				BB0B5E6123698912000C932F /* vboindexer.cpp */,
+				BB0B5E6023698912000C932F /* vboindexer.hpp */,
 				BB980BCE23508433006D74A9 /* objloader.cpp */,
 				BB980BCF23508433006D74A9 /* objloader.hpp */,
 				BB980BC22350548E006D74A9 /* controls.cpp */,
@@ -7651,6 +7651,7 @@
 				BB00E6D8234B31ED00EF64EB /* texture.cpp in Sources */,
 				BB980BC42350548E006D74A9 /* controls.cpp in Sources */,
 				BC6E26EEEC834CE7A5A68728 /* shader.cpp in Sources */,
+				BB0B5E6223698912000C932F /* vboindexer.cpp in Sources */,
 				BB980BD023508433006D74A9 /* objloader.cpp in Sources */,
 				46427A33711C49CF9E95A80D /* playground.cpp in Sources */,
 			);
@@ -7875,7 +7876,6 @@
 			files = (
 				86411BC549AD43258EA30560 /* LoadOGL.mm in Sources */,
 				5E901FFF37D84E11B5222C36 /* LoadOGLCore.mm in Sources */,
-				BB0B5E5F23698418000C932F /* vboindexer.cpp in Sources */,
 				BF2292781C014CCD85E6420B /* TwBar.mm in Sources */,
 				BB21B79313864869955D25B4 /* TwColors.mm in Sources */,
 				EE54822D8D4849CDA2092D82 /* TwEventGLFW.m in Sources */,
