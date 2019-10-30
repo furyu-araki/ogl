@@ -31,6 +31,9 @@ using namespace glm;
 // objファイルを読み込むメソッドをインクルード
 #include <common/objloader.hpp>
 
+// インデックスVBO作成用のメソッドをインクルード
+#include <common/vboindexer.hpp>
+
 int main( void )
 {
 	// GLFWを初期化する
@@ -122,6 +125,12 @@ int main( void )
         return -1;
     }
     
+    std::vector<unsigned short> indices;
+    std::vector<glm::vec3> indexed_vertices;
+    std::vector<glm::vec2> indexed_uvs;
+    std::vector<glm::vec3> indexed_normals;
+    indexVBO(vertices, uvs, normals, indices, indexed_vertices, indexed_uvs, indexed_normals);
+    
     // バッファを表す。
     // バッファは、データを一時的に保持する場所という認識でOKかな？
     GLuint vertexbuffer;
@@ -132,7 +141,7 @@ int main( void )
     // これ以降のコマンドはvertexbufferに関するものだよという宣言
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
     // 頂点のデータをOpenGLに渡す
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(vec3), &vertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, indexed_vertices.size() * sizeof(vec3), &indexed_vertices[0], GL_STATIC_DRAW);
     
     // UV座標用のバッファ
     GLuint uvbuffer;
@@ -141,13 +150,19 @@ int main( void )
     // これ以降のコマンドはuvbufferに関するもの
     glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
     // UV座標用バッファのデータをOpenGLに渡す
-    glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(vec2), &uvs[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, indexed_uvs.size() * sizeof(vec2), &indexed_uvs[0], GL_STATIC_DRAW);
     
     // 法線用のバッファ
     GLuint normalbuffer;
     glGenBuffers(1, &normalbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-    glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(vec3), &normals[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, indexed_normals.size() * sizeof(vec3), &indexed_normals[0], GL_STATIC_DRAW);
+    
+    // インデックス用のバッファ
+    GLuint elementbuffer;
+    glGenBuffers(1, &elementbuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned short), &indices[0] , GL_STATIC_DRAW);
     
     // ワールド座標での光源の位置
     glUseProgram(programID);
@@ -215,9 +230,12 @@ int main( void )
                               (void*) 0 // オフセット。普通に最初から読むので0
                               );
         
+        // インデックスバッファをバインド
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+        
         // 三角形を書く！
         // 頂点0から頂点数まで描く
-        glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+        glDrawArrays(GL_TRIANGLES, 0, indices.size());
         // 頂点属性配列（vertex attribute array）を無効化する。おまじないにしか見えない。
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
@@ -233,6 +251,8 @@ int main( void )
     // 後処理。VertexBuffer、VertexArray、プログラム、テクスチャを削除
     glDeleteBuffers(1, &vertexbuffer);
     glDeleteBuffers(1, &uvbuffer);
+    glDeleteBuffers(1, &normalbuffer);
+    glDeleteBuffers(1, &elementbuffer);
     glDeleteVertexArrays(1, &VertexArrayID);
     glDeleteProgram(programID);
     glDeleteTextures(1, &Texture);
